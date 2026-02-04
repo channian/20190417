@@ -1,0 +1,10 @@
+{
+  "database": {
+    "path": "D:/kepware/tags.duckdb",
+    "comment": "請將此檔案複製為 config.json 並修改為您的實際路徑"
+  },
+  "report": {
+    "output_dir": "./reports",
+    "file_prefix": "Kepware月報"
+  }
+}

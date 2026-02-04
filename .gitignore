@@ -56,6 +56,12 @@ desktop.ini
 *.db
 *.sqlite
 *.sqlite3
+*.duckdb
+
+# Kepware 報表輸出
+kepware_reports/reports/
+kepware_reports/*.xlsx
+kepware_reports/*.xls
 
 # ===== IDE 與編輯器 =====
 .vscode/
