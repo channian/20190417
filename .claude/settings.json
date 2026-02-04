@@ -1,0 +1,47 @@
+{
+  "description": "廠務系統數據分析與圖控應用專案設定",
+
+  "permissions": {
+    "allow": [
+      "Read(*)",
+      "Glob(*)",
+      "Grep(*)",
+      "Bash(ls *)",
+      "Bash(pwd)",
+      "Bash(git status)",
+      "Bash(git log *)",
+      "Bash(git diff *)",
+      "Bash(python --version)",
+      "Bash(pip list)",
+      "Bash(which python*)"
+    ]
+  },
+
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "description": "保護重要設定檔不被修改",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "echo \"$TOOL_INPUT\" | jq -r '.tool_input.file_path // empty' | grep -qE '(\\.env$|credentials|secrets|config\\.json$)' && echo '⚠️  警告：這是敏感設定檔，請確認是否要修改' && exit 1 || exit 0"
+          }
+        ]
+      }
+    ],
+
+    "Stop": [
+      {
+        "matcher": "",
+        "description": "完成任務時提醒檢查並提交",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "git status --short | grep -q . && echo '\n📝 提醒：有檔案變更，記得檢查並提交到 Git' || exit 0"
+          }
+        ]
+      }
+    ]
+  }
+}
