@@ -264,9 +264,13 @@ class KepwareMonthlyReport:
 
         # 寫入 Excel（使用 xlsxwriter 引擎以支援格式設定）
         with pd.ExcelWriter(output_path, engine='xlsxwriter') as writer:
+            # 儲存所有 sheet 的 DataFrame 以便後續調整欄寬
+            sheets_data = {}
+
             # Sheet 1: 總覽
             overview_df.to_excel(writer, sheet_name='總覽', index=False, startrow=2)
             completeness_df.to_excel(writer, sheet_name='總覽', index=False, startrow=10)
+            sheets_data['總覽'] = overview_df  # 用第一個 DataFrame 來計算
 
             # 在總覽頁面加上標題
             workbook = writer.book
@@ -286,34 +290,42 @@ class KepwareMonthlyReport:
 
             # Sheet 2: 廠區分布
             site_dist.to_excel(writer, sheet_name='廠區分布', index=False)
+            sheets_data['廠區分布'] = site_dist
 
             # Sheet 3: 部門分布
             dept_dist.to_excel(writer, sheet_name='部門分布', index=False)
+            sheets_data['部門分布'] = dept_dist
 
             # Sheet 4: Driver 統計
             driver_dist.to_excel(writer, sheet_name='Driver統計', index=False)
+            sheets_data['Driver統計'] = driver_dist
 
             # Sheet 5: 資料類型統計
             datatype_dist.to_excel(writer, sheet_name='資料類型統計', index=False)
+            sheets_data['資料類型統計'] = datatype_dist
 
             # Sheet 6: 專案統計
             project_stats.to_excel(writer, sheet_name='專案統計', index=False)
+            sheets_data['專案統計'] = project_stats
 
             # Sheet 7: 負責人統計
             owner_stats.to_excel(writer, sheet_name='負責人統計', index=False)
+            sheets_data['負責人統計'] = owner_stats
 
             # Sheet 8: 新增趨勢
             monthly_trend.to_excel(writer, sheet_name='新增趨勢', index=False)
+            sheets_data['新增趨勢'] = monthly_trend
 
             # 自動調整欄寬
-            for sheet_name in writer.sheets:
+            for sheet_name, df in sheets_data.items():
                 worksheet = writer.sheets[sheet_name]
-                for i, col in enumerate(writer.sheets[sheet_name].table.columns):
+                for i, col in enumerate(df.columns):
+                    # 計算欄位內容的最大寬度
                     max_len = max(
-                        writer.sheets[sheet_name].table[col].astype(str).map(len).max(),
-                        len(col)
-                    ) + 2
-                    worksheet.set_column(i, i, min(max_len, 50))
+                        df[col].astype(str).map(len).max(),  # 內容最大寬度
+                        len(str(col))  # 欄位名稱寬度
+                    ) + 2  # 增加一些邊距
+                    worksheet.set_column(i, i, min(max_len, 50))  # 最大寬度限制為 50
 
         print(f"\n✅ 報表生成完成！")
         print(f"📁 檔案位置: {output_path.absolute()}")
