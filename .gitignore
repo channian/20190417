@@ -1,0 +1,74 @@
+# ===== 敏感資料保護 =====
+# 環境變數與設定檔（可能包含密碼、連線資訊）
+.env
+.env.local
+*.env
+config.json
+config.local.json
+credentials.json
+secrets.json
+
+# ===== Claude Code 個人設定 =====
+# 個人設定不需要分享給其他人
+.claude/settings.local.json
+.claude/*.local.*
+CLAUDE.local.md
+
+# ===== Python 相關 =====
+# Python 編譯檔案
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# 虛擬環境
+venv/
+.venv/
+env/
+ENV/
+virtualenv/
+
+# Python 套件管理
+pip-log.txt
+pip-delete-this-directory.txt
+.Python
+
+# Jupyter Notebook
+.ipynb_checkpoints/
+*.ipynb_checkpoints
+
+# Python 測試覆蓋率
+.coverage
+.pytest_cache/
+htmlcov/
+
+# ===== 資料與暫存檔案 =====
+*.log
+*.tmp
+*.bak
+*.swp
+*~
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# 資料庫檔案
+*.db
+*.sqlite
+*.sqlite3
+*.duckdb
+
+# Kepware 報表輸出
+kepware_reports/reports/
+kepware_reports/*.xlsx
+kepware_reports/*.xls
+
+# ===== IDE 與編輯器 =====
+.vscode/
+.idea/
+*.sublime-*
+.spyderproject
+.spyproject
+
+# ===== 其他 =====
+# 如果之後有需要保護的特定資料夾或檔案，可以在此新增
